@@ -1,6 +1,7 @@
 package com.example.SocialUserService.service;
 
 import com.example.SocialUserService.dto.UsersDTO;
+import com.example.SocialUserService.entity.UserRole;
 import com.example.SocialUserService.entity.Users;
 import com.example.SocialUserService.repo.UsersRepo;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,6 +32,10 @@ public class UsersServiceImpl implements UsersService {
             users.setPassword(encodedPassword);
         }
 
+        if (users.getRole() == null) {
+            users.setRole(UserRole.USER);
+        }
+
         Users savedUser = usersRepo.save(users);
         return convertToDTO(savedUser);
     }
@@ -43,6 +48,7 @@ public class UsersServiceImpl implements UsersService {
                 .orElseThrow(() -> new RuntimeException("User Not Found!"));
 
         existingUser.setEmail(usersDTO.getEmail());
+        existingUser.setRole(usersDTO.getRole());
 
         if (newPassword != null && !newPassword.isEmpty() && !newPassword.equals(existingUser.getPassword())) {
             existingUser.setPassword(passwordEncoder.encode(newPassword));
@@ -54,10 +60,13 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public UsersDTO login(String email, String password) {
-        Users users=usersRepo.findByEmail(email).orElseThrow(()->new RuntimeException("Invalid email address. Please try again!"));
-        if(!passwordEncoder.matches(password,users.getPassword())){
+        Users users = usersRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Invalid email address. Please try again!"));
+
+        if (!passwordEncoder.matches(password, users.getPassword())) {
             throw new RuntimeException("Sorry! Invalid Username or Password!");
         }
+
         return convertToDTO(users);
     }
 
@@ -85,10 +94,10 @@ public class UsersServiceImpl implements UsersService {
     }
 
     private UsersDTO convertToDTO(Users users) {
-        return new UsersDTO(users.getId(), users.getEmail(), users.isDeleted());
+        return new UsersDTO(users.getId(), users.getEmail(), users.isDeleted(), users.getRole());
     }
 
     private Users convertToEntity(UsersDTO usersDTO) {
-        return new Users(usersDTO.getId(), usersDTO.getEmail(), usersDTO.isDeleted());
+        return new Users(usersDTO.getId(), usersDTO.getEmail(), usersDTO.isDeleted(), usersDTO.getRole());
     }
 }

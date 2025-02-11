@@ -1,10 +1,12 @@
 package com.example.SocialUserService.controller;
+
 import com.example.SocialUserService.dto.UsersDTO;
 import com.example.SocialUserService.security.JwtResponseEntity;
 import com.example.SocialUserService.security.JwtService;
 import com.example.SocialUserService.service.UsersService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,43 +29,50 @@ public class UsersController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUserDTO);
     }
 
-    @GetMapping("/getAll")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin/getAll")
     public ResponseEntity<List<UsersDTO>> getAllUsers() {
         List<UsersDTO> usersDTOList = usersService.findAllUsers();
         return ResponseEntity.ok(usersDTOList);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<UsersDTO> getUserById(@PathVariable String id) {
         UsersDTO userDTO = usersService.findById(id);
         return ResponseEntity.ok(userDTO);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<UsersDTO> updateUser(@PathVariable String id, @RequestBody UsersDTO usersDTO, @RequestParam(required = false) String newPassword) { // Changed to String
+    public ResponseEntity<UsersDTO> updateUser(
+            @PathVariable String id,
+            @RequestBody UsersDTO usersDTO,
+            @RequestParam(required = false) String newPassword
+    ) {
         usersDTO.setId(id);
         UsersDTO updatedUserDTO = usersService.update(usersDTO, newPassword);
         return ResponseEntity.ok(updatedUserDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/admin/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable String id) {
         usersService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponseEntity> loginUser(@RequestBody UsersDTO usersDTO){
-        UsersDTO user = usersService.login(usersDTO.getEmail(),usersDTO.getPassword());
+    public ResponseEntity<JwtResponseEntity> loginUser(@RequestBody UsersDTO usersDTO) {
+        UsersDTO user = usersService.login(usersDTO.getEmail(), usersDTO.getPassword());
         String token = jwtService.generateJwt(user);
-        JwtResponseEntity response = new JwtResponseEntity("Login Successful!! Here is your token!",token);
+        JwtResponseEntity response = new JwtResponseEntity("Login Successful!! Here is your token!", token);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/validateToken")
-    public ResponseEntity<String> validateToken(@RequestParam("token") String token){
+    public ResponseEntity<String> validateToken(@RequestParam("token") String token) {
         jwtService.validateToken(token);
         return ResponseEntity.ok("Token is valid!!");
     }
 }
-

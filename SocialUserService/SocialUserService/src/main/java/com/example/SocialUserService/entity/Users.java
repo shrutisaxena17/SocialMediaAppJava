@@ -13,15 +13,22 @@ public class Users {
     private String password;
     private boolean isDeleted;
 
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserProfile userProfile;
+
 
     public Users() {
         this.id = UUID.randomUUID().toString();
     }
 
-    public Users(String id, String email, boolean isDeleted) {
+    public Users(String id, String email, boolean isDeleted, UserRole role) {
         this.id = UUID.randomUUID().toString();
         this.email = email;
         this.isDeleted = isDeleted;
+        this.role = role;
     }
 
     public String getId() {
@@ -54,5 +61,21 @@ public class Users {
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 }

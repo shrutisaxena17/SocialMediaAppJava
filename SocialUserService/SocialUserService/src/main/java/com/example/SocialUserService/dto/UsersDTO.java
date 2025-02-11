@@ -1,18 +1,22 @@
 package com.example.SocialUserService.dto;
 
+import com.example.SocialUserService.entity.UserRole;
+
 public class UsersDTO {
     private String id;
     private String email;
     private String password;
     private boolean isDeleted;
+    private UserRole role; 
 
     public UsersDTO() {
     }
 
-    public UsersDTO(String id, String email, boolean isDeleted) {
+    public UsersDTO(String id, String email, boolean isDeleted, UserRole role) {
         this.id = id;
         this.email = email;
         this.isDeleted = isDeleted;
+        this.role = role;
     }
 
     public String getId() {
@@ -45,5 +49,13 @@ public class UsersDTO {
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 }

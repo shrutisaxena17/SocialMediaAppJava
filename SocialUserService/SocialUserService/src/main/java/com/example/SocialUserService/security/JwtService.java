@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -19,10 +19,11 @@ public class JwtService {
     private static final long EXPIRATION_TIME = 86400000L;
 
     public String generateJwt(UsersDTO user) {
-        Map<String,Object> claims = new HashMap<>();
-        claims.put("Email", user.getEmail());
         return Jwts.builder()
-                .setClaims(claims)
+                .setClaims(Map.of(
+                        "email", user.getEmail(),
+                        "roles", "ROLE_" + user.getRole()
+                ))
                 .setSubject(user.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
@@ -40,5 +41,13 @@ public class JwtService {
 
     public void validateToken(String token) {
         parseJwt(token);
+    }
+
+    public String getUserIdFromToken(String token) {
+        return parseJwt(token).getSubject();
+    }
+
+    public List<String> getRolesFromToken(String token) {
+        return parseJwt(token).get("roles", List.class);
     }
 }
