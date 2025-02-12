@@ -1,6 +1,6 @@
 package com.example.SocialUserService.controller;
 
-import com.example.SocialUserService.entity.WorkExperience;
+import com.example.SocialUserService.dto.WorkExperienceDTO;
 import com.example.SocialUserService.service.WorkExperienceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,8 +21,8 @@ public class WorkExperienceController {
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{userProfileId}")
-    public ResponseEntity<List<WorkExperience>> getWorkExperiences(@PathVariable Long userProfileId) {
-        List<WorkExperience> experiences = workExperienceService.getWorkExperiencesByUserProfileId(userProfileId);
+    public ResponseEntity<List<WorkExperienceDTO>> getWorkExperiences(@PathVariable Long userProfileId) {
+        List<WorkExperienceDTO> experiences = workExperienceService.getWorkExperiencesByUserProfileId(userProfileId);
         if (experiences.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -31,15 +31,15 @@ public class WorkExperienceController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping
-    public ResponseEntity<WorkExperience> addWorkExperience(@RequestBody WorkExperience workExperience) {
-        WorkExperience savedExperience = workExperienceService.saveWorkExperience(workExperience);
+    public ResponseEntity<WorkExperienceDTO> addWorkExperience(@RequestBody WorkExperienceDTO workExperienceDTO) {
+        WorkExperienceDTO savedExperience = workExperienceService.saveWorkExperience(workExperienceDTO);
         return ResponseEntity.status(201).body(savedExperience);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteWorkExperience(@PathVariable Long id) {
-        Optional<WorkExperience> experience = workExperienceService.getWorkExperienceById(id);
+        Optional<WorkExperienceDTO> experience = workExperienceService.getWorkExperienceById(id);
         if (experience.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

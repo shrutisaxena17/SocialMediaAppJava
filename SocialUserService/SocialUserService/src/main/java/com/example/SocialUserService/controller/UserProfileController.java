@@ -1,6 +1,6 @@
 package com.example.SocialUserService.controller;
 
-import com.example.SocialUserService.entity.UserProfile;
+import com.example.SocialUserService.dto.UserProfileDTO;
 import com.example.SocialUserService.service.UserProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,22 +20,22 @@ public class UserProfileController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<UserProfile>> getAllProfiles() {
-        List<UserProfile> profiles = userProfileService.getAllProfiles();
+    public ResponseEntity<List<UserProfileDTO>> getAllProfiles() {
+        List<UserProfileDTO> profiles = userProfileService.getAllProfiles();
         return ResponseEntity.ok(profiles);
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{id}")
-    public ResponseEntity<UserProfile> getProfileById(@PathVariable Long id) {
-        UserProfile profile = userProfileService.getProfileById(id);
+    public ResponseEntity<UserProfileDTO> getProfileById(@PathVariable Long id) {
+        UserProfileDTO profile = userProfileService.getProfileById(id);
         return ResponseEntity.ok(profile);
     }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping
-    public ResponseEntity<UserProfile> createProfile(@RequestBody UserProfile userProfile) {
-        UserProfile savedProfile = userProfileService.saveProfile(userProfile);
+    public ResponseEntity<UserProfileDTO> createProfile(@RequestBody UserProfileDTO userProfileDTO) {
+        UserProfileDTO savedProfile = userProfileService.saveProfile(userProfileDTO);
         return ResponseEntity.status(201).body(savedProfile);
     }
 

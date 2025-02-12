@@ -1,6 +1,6 @@
 package com.example.SocialUserService.controller;
 
-import com.example.SocialUserService.entity.Education;
+import com.example.SocialUserService.dto.EducationDTO;
 import com.example.SocialUserService.service.EducationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,8 +21,8 @@ public class EducationController {
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{userProfileId}")
-    public ResponseEntity<List<Education>> getEducation(@PathVariable Long userProfileId) {
-        List<Education> educationList = educationService.getEducationByUserProfileId(userProfileId);
+    public ResponseEntity<List<EducationDTO>> getEducation(@PathVariable Long userProfileId) {
+        List<EducationDTO> educationList = educationService.getEducationByUserProfileId(userProfileId);
         if (educationList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -31,15 +31,15 @@ public class EducationController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping
-    public ResponseEntity<Education> addEducation(@RequestBody Education education) {
-        Education savedEducation = educationService.saveEducation(education);
+    public ResponseEntity<EducationDTO> addEducation(@RequestBody EducationDTO educationDTO) {
+        EducationDTO savedEducation = educationService.saveEducation(educationDTO);
         return ResponseEntity.status(201).body(savedEducation);
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEducation(@PathVariable Long id) {
-        Optional<Education> education = educationService.getEducationById(id);
+        Optional<EducationDTO> education = educationService.getEducationById(id);
         if (education.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

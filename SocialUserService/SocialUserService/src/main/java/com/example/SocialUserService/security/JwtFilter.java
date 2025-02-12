@@ -14,7 +14,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -34,28 +33,35 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7);
+            System.out.println("Extracted Token: " + token);
 
             try {
                 Claims claims = jwtService.parseJwt(token);
                 String email = claims.getSubject();
-                List<String> roles = claims.get("roles", List.class);
+                String role = claims.get("roles", String.class); // Extract role as String
 
-                if (email != null && roles != null) {
-                    List<SimpleGrantedAuthority> authorities = roles.stream()
-                            .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                            .collect(Collectors.toList());
+                if (email != null && role != null) {
+                    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role);
+                    System.out.println("Authenticated User: " + email);
+                    System.out.println("Role: " + authority);
 
                     UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(email, null, authorities);
-
+                            new UsernamePasswordAuthenticationToken(email, null, List.of(authority));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    System.out.println("JWT Role is missing.");
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("Role missing in token");
+                    return;
                 }
             } catch (Exception e) {
+                System.out.println("JWT Parsing Failed: " + e.getMessage());
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Invalid or expired token");
                 return;
             }
         }
+
         filterChain.doFilter(request, response);
     }
 }
