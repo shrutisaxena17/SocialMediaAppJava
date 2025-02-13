@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,5 +71,23 @@ public class UserProfileService {
                 userProfile.getFollowersCount(),
                 userProfile.getFollowingCount()
         );
+    }
+
+    @Transactional
+    public void updateFollowerFollowingCount(String receiverId, String senderId, int change) {
+        Optional<UserProfile> receiverProfileOpt = userProfileRepository.findByUser_UserId(receiverId);
+        Optional<UserProfile> senderProfileOpt = userProfileRepository.findByUser_UserId(senderId);
+
+        if (receiverProfileOpt.isPresent()) {
+            UserProfile receiverProfile = receiverProfileOpt.get();
+            receiverProfile.setFollowersCount(receiverProfile.getFollowersCount() + change);
+            userProfileRepository.save(receiverProfile);
+        }
+
+        if (senderProfileOpt.isPresent()) {
+            UserProfile senderProfile = senderProfileOpt.get();
+            senderProfile.setFollowingCount(senderProfile.getFollowingCount() + change);
+            userProfileRepository.save(senderProfile);
+        }
     }
 }

@@ -16,7 +16,6 @@ public class UserProfile {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
-
     private String name;
     private String bio;
     private String profilePictureUrl;

@@ -4,14 +4,14 @@ import com.example.ConnectionService.entity.ConnectionStatus;
 
 public class ConnectionDTO {
     private Long id;
-    private Long senderId;
-    private Long receiverId;
+    private String senderId;
+    private String receiverId;
     private ConnectionStatus status;
 
     public ConnectionDTO() {
     }
 
-    public ConnectionDTO(Long id, Long senderId, Long receiverId, ConnectionStatus status) {
+    public ConnectionDTO(Long id, String senderId, String receiverId, ConnectionStatus status) {
         this.id = id;
         this.senderId = senderId;
         this.receiverId = receiverId;
@@ -26,19 +26,19 @@ public class ConnectionDTO {
         this.id = id;
     }
 
-    public Long getSenderId() {
+    public String getSenderId() {
         return senderId;
     }
 
-    public void setSenderId(Long senderId) {
+    public void setSenderId(String senderId) {
         this.senderId = senderId;
     }
 
-    public Long getReceiverId() {
+    public String getReceiverId() {
         return receiverId;
     }
 
-    public void setReceiverId(Long receiverId) {
+    public void setReceiverId(String receiverId) {
         this.receiverId = receiverId;
     }
 
@@ -48,5 +48,15 @@ public class ConnectionDTO {
 
     public void setStatus(ConnectionStatus status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "ConnectionDTO{" +
+                "id=" + id +
+                ", senderId=" + senderId +
+                ", receiverId=" + receiverId +
+                ", status=" + status +
+                '}';
     }
 }

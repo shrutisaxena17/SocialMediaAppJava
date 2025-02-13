@@ -11,10 +11,10 @@ public class ConnectionEntity {
     private Long id;
 
     @Column(nullable = false)
-    private Long senderId;
+    private String senderId;
 
     @Column(nullable = false)
-    private Long receiverId;
+    private String receiverId;
 
     @Enumerated(EnumType.STRING)
     private ConnectionStatus status;
@@ -22,7 +22,7 @@ public class ConnectionEntity {
     public ConnectionEntity() {
     }
 
-    public ConnectionEntity(Long id, Long senderId, Long receiverId, ConnectionStatus status) {
+    public ConnectionEntity(Long id, String senderId, String receiverId, ConnectionStatus status) {
         this.id = id;
         this.senderId = senderId;
         this.receiverId = receiverId;
@@ -37,19 +37,19 @@ public class ConnectionEntity {
         this.id = id;
     }
 
-    public Long getSenderId() {
+    public String getSenderId() {
         return senderId;
     }
 
-    public void setSenderId(Long senderId) {
+    public void setSenderId(String senderId) {
         this.senderId = senderId;
     }
 
-    public Long getReceiverId() {
+    public String getReceiverId() {
         return receiverId;
     }
 
-    public void setReceiverId(Long receiverId) {
+    public void setReceiverId(String receiverId) {
         this.receiverId = receiverId;
     }
 

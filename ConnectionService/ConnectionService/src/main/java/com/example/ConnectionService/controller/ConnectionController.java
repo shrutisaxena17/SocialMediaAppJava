@@ -18,7 +18,7 @@ public class ConnectionController {
     }
 
     @PostMapping("/{receiverId}")
-    public ResponseEntity<ConnectionDTO> sendConnectionRequest(@RequestParam Long senderId, @PathVariable Long receiverId) {
+    public ResponseEntity<ConnectionDTO> sendConnectionRequest(@RequestParam String senderId, @PathVariable String receiverId) {
         ConnectionDTO connection = connectionService.sendConnectionRequest(senderId, receiverId);
         return ResponseEntity.status(201).body(connection);
     }
@@ -36,12 +36,12 @@ public class ConnectionController {
     }
 
     @GetMapping("/{userId}/pending")
-    public ResponseEntity<List<ConnectionDTO>> getPendingRequests(@PathVariable Long userId) {
+    public ResponseEntity<List<ConnectionDTO>> getPendingRequests(@PathVariable String userId) {
         return ResponseEntity.ok(connectionService.getPendingRequests(userId));
     }
 
     @GetMapping("/{userId}/connections")
-    public ResponseEntity<List<ConnectionDTO>> getConnections(@PathVariable Long userId) {
+    public ResponseEntity<List<ConnectionDTO>> getConnections(@PathVariable String userId) {
         return ResponseEntity.ok(connectionService.getConnections(userId));
     }
 }
