@@ -11,7 +11,14 @@ spring:
         - id: SOCIALUSERSERVICE
           uri: lb://SOCIALUSERSERVICE
           predicates:
-             - Path=/users/**
+            - Path=/users/**
+          filters:
+            - AuthenticationFilter
+
+        - id: CONNECTIONSERVICE
+          uri: lb://CONNECTIONSERVICE
+          predicates:
+            - Path=/connection/**
           filters:
             - AuthenticationFilter
 

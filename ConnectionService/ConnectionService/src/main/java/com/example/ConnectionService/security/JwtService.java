@@ -1,4 +1,4 @@
-package com.example.ApiGateway.util;
+package com.example.ConnectionService.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -7,15 +7,14 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Service
-public class JwtUtil {
-
+public class JwtService {
     private static final String SECRET_KEY = "afafasfafafasfasfasfafacasdasfasxASFACASDFACASDFASFASFDAFASFASDAADSCSDFADCVSGCFVADXCcadwavfsfarvf";
     private static final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+    private static final long EXPIRATION_TIME = 86400000L;
+
     public Claims parseJwt(String jwt) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -24,7 +23,15 @@ public class JwtUtil {
                 .getBody();
     }
 
-    public String extractRole(String jwt) {
-        return parseJwt(jwt).get("role", String.class);
+    public void validateToken(String token) {
+        parseJwt(token);
+    }
+
+    public String getUserIdFromToken(String token) {
+        return parseJwt(token).getSubject();
+    }
+
+    public List<String> getRolesFromToken(String token) {
+        return parseJwt(token).get("roles", List.class);
     }
 }

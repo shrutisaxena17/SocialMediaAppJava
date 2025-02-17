@@ -75,8 +75,8 @@ public class UserProfileService {
 
     @Transactional
     public void updateFollowerFollowingCount(String receiverId, String senderId, int change) {
-        Optional<UserProfile> receiverProfileOpt = userProfileRepository.findByUser_UserId(receiverId);
-        Optional<UserProfile> senderProfileOpt = userProfileRepository.findByUser_UserId(senderId);
+        Optional<UserProfile> receiverProfileOpt = userProfileRepository.findByUser_Id(receiverId);
+        Optional<UserProfile> senderProfileOpt = userProfileRepository.findByUser_Id(senderId);
 
         if (receiverProfileOpt.isPresent()) {
             UserProfile receiverProfile = receiverProfileOpt.get();
