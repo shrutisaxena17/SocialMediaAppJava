@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>ConnectionService</artifactId>
+	<artifactId>PostService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ConnectionService</name>
+	<name>PostService</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
@@ -45,27 +45,14 @@
 			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-
-
-		<dependency>
-			<groupId>org.springframework.kafka</groupId>
-			<artifactId>spring-kafka</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
@@ -79,8 +66,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-
 	<build>
 		<plugins>
 			<plugin>
