@@ -32,7 +32,7 @@ public class PostController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Post>> getPostsByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<Post>> getPostsByUserId(@PathVariable String userId) {
         List<Post> posts = postService.getPostsByUserId(userId);
         return posts.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(posts);
     }

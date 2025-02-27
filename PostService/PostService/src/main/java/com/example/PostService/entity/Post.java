@@ -13,7 +13,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    private String userId;
 
     private String content;
 
@@ -21,7 +21,7 @@ public class Post {
 
     private LocalDateTime createdAt;
 
-    public Post(Long id, Long userId, String content, String imageUrl, LocalDateTime createdAt) {
+    public Post(Long id, String userId, String content, String imageUrl, LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
         this.content = content;
@@ -40,11 +40,11 @@ public class Post {
         this.id = id;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

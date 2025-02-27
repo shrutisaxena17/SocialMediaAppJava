@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface PostService {
     Post createPost(Post post);
-    List<Post> getPostsByUserId(Long userId);
+    List<Post> getPostsByUserId(String userId);
     List<Post> getAllPosts();
     Optional<Post> getPostById(Long id);
     boolean deletePost(Long id);
